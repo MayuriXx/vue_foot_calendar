@@ -8,6 +8,7 @@ export const useAuthStore = defineStore('auth', () => {
   const isLoading = ref(false)
   const error = ref<string | null>(null)
   const token = ref<string | null>(null)
+  const favoriteTeamId = ref<number | null>(null)
 
   // Computed
   const isAuthenticated = computed(() => !!token.value && !!user.value)
@@ -46,10 +47,26 @@ export const useAuthStore = defineStore('auth', () => {
   function initializeAuth() {
     const currentUser = authService.getCurrentUser()
     const authToken = localStorage.getItem('authToken')
+    const savedFavoriteTeamId = localStorage.getItem('favoriteTeamId')
 
     if (currentUser && authToken) {
       user.value = currentUser
       token.value = authToken
+    }
+
+    if (savedFavoriteTeamId) {
+      favoriteTeamId.value = parseInt(savedFavoriteTeamId, 10)
+    }
+  }
+
+  function setFavoriteTeam(teamId: number | null) {
+    favoriteTeamId.value = teamId
+
+    // Persister dans localStorage
+    if (teamId) {
+      localStorage.setItem('favoriteTeamId', teamId.toString())
+    } else {
+      localStorage.removeItem('favoriteTeamId')
     }
   }
 
@@ -59,6 +76,7 @@ export const useAuthStore = defineStore('auth', () => {
     isLoading,
     error,
     token,
+    favoriteTeamId,
 
     // Computed
     isAuthenticated,
@@ -67,5 +85,6 @@ export const useAuthStore = defineStore('auth', () => {
     login,
     logout,
     initializeAuth,
+    setFavoriteTeam,
   }
 })

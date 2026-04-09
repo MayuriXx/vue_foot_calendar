@@ -3,6 +3,7 @@ import { useAuthStore } from '@/stores/auth'
 import LoginView from '@/views/LoginView.vue'
 import CalendarView from '@/views/CalendarView.vue'
 import MatchDetailView from '@/views/MatchDetailView.vue'
+import ProfileView from '@/views/ProfileView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,6 +24,12 @@ const router = createRouter({
       path: '/match/:fixtureId',
       name: 'MatchDetail',
       component: MatchDetailView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/profile',
+      name: 'Profile',
+      component: ProfileView,
       meta: { requiresAuth: true },
     },
     {

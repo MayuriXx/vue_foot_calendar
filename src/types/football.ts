@@ -211,3 +211,61 @@ export interface MatchDetails {
   lineups: MatchLineup[]
 }
 
+// Standings/Classement
+export interface Standing {
+  rank: number
+  team: {
+    id: number
+    name: string
+    logo: string
+  }
+  points: number
+  goalsDiff: number
+  group: string | null
+  form: string | null
+  status: string
+  description: string | null
+  all: {
+    played: number
+    win: number
+    draw: number
+    lose: number
+    goals: {
+      for: number
+      against: number
+    }
+  }
+  home: {
+    played: number
+    win: number
+    draw: number
+    lose: number
+    goals: {
+      for: number
+      against: number
+    }
+  }
+  away: {
+    played: number
+    win: number
+    draw: number
+    lose: number
+    goals: {
+      for: number
+      against: number
+    }
+  }
+  update: string
+}
+
+export interface StandingsResponse {
+  league: {
+    id: number
+    name: string
+    country: string
+    logo: string
+    flag: string | null
+    season: number
+    standings: Standing[][]
+  }
+}

@@ -1,4 +1,4 @@
-import type { ApiFootballResponse, Match, League, Team, MatchesQueryParams, MatchStatistics, MatchEvent, MatchLineup } from '@/types/football'
+import type { ApiFootballResponse, Match, League, Team, MatchesQueryParams, MatchStatistics, MatchEvent, MatchLineup, Standing, StandingsResponse } from '@/types/football'
 
 class FootballService {
   private apiKey: string
@@ -213,6 +213,39 @@ class FootballService {
       return data.response
     } catch (error) {
       console.error('Error fetching match lineups:', error)
+      return []
+    }
+  }
+
+  /**
+   * Récupère le classement d'une ligue
+   * Fonctionne pour tous les statuts de match (en direct, à venir, terminés)
+   */
+  async getStandings(leagueId: number, season: number): Promise<Standing[][]> {
+    try {
+      const url = `${this.baseURL}/standings?league=${leagueId}&season=${season}`
+      const response = await fetch(url, { headers: this.headers })
+
+      if (!response.ok) {
+        if (response.status === 429) {
+          console.warn('Rate limit exceeded for standings request, will retry')
+        }
+        throw new Error(`API error: ${response.status}`)
+      }
+
+      const data: ApiFootballResponse<StandingsResponse> = await response.json()
+      
+      // Retourne le classement du premier groupe (ou groupe général)
+      // La plupart des ligues n'ont qu'un seul groupe, sauf pour certains championnat (cf. Ligue 1 avec groupes hiver/été)
+      const standings = data.response[0]?.league.standings || []
+      
+      if (!standings || standings.length === 0) {
+        console.warn(`No standings available for league ${leagueId}, season ${season}`)
+      }
+      
+      return standings
+    } catch (error) {
+      console.error('Error fetching standings:', error)
       return []
     }
   }

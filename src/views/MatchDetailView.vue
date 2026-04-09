@@ -1,20 +1,61 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useMatchDetail } from '@/composables/useMatchDetail'
 import MatchHeader from '@/components/MatchHeader.vue'
 import ScoresSection from '@/components/ScoresSection.vue'
 import StatisticsSection from '@/components/StatisticsSection.vue'
 import EventsTimeline from '@/components/EventsTimeline.vue'
 import LineupsSection from '@/components/LineupsSection.vue'
+import StandingsSection from '@/components/StandingsSection.vue'
 
 const route = useRoute()
 const router = useRouter()
 const fixtureId = parseInt(route.params.fixtureId as string)
-const { match, statistics, events, lineups, isLoading, error, loadMatchDetails } = useMatchDetail(fixtureId)
+const { 
+  match, 
+  statistics, 
+  events, 
+  lineups, 
+  standings, 
+  isLoading, 
+  error, 
+  standingsError, 
+  isLoadingStandings,
+  loadMatchDetails,
+  loadStandings, // Lazy loading pour standings
+} = useMatchDetail(fixtureId)
+
+const standingsSection = ref<HTMLElement | null>(null)
 
 onMounted(() => {
   loadMatchDetails()
+  
+  // Lazy load standings après 2 secondes (fallback)
+  const loadStandingsTimer = setTimeout(() => {
+    loadStandings()
+  }, 2000)
+
+  // Intersection Observer pour charger standings au scroll
+  if (standingsSection.value) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            loadStandings()
+            observer.unobserve(entry.target)
+          }
+        })
+      },
+      { threshold: 0.1 }
+    )
+    observer.observe(standingsSection.value)
+  }
+
+  // Cleanup
+  return () => {
+    clearTimeout(loadStandingsTimer)
+  }
 })
 
 const goBack = () => {
@@ -57,6 +98,23 @@ const goBack = () => {
 
         <!-- Lineups Component -->
         <LineupsSection v-if="lineups.length > 0" :lineups="lineups" />
+
+        <!-- Standings Component (Lazy Loaded) -->
+        <div ref="standingsSection">
+          <div v-if="isLoadingStandings" class="standings-loading">
+            <p>⏳ Chargement du classement...</p>
+          </div>
+          <div v-else-if="standingsError" class="standings-unavailable">
+            <p>{{ standingsError }}</p>
+          </div>
+          <StandingsSection
+            v-if="standings.length > 0 && match"
+            :standings="standings"
+            :home-team-id="match.teams.home.id"
+            :away-team-id="match.teams.away.id"
+            :league-name="match.league.name"
+          />
+        </div>
       </div>
     </main>
   </div>
@@ -132,6 +190,30 @@ const goBack = () => {
   display: flex;
   flex-direction: column;
   gap: 30px;
+}
+
+.standings-unavailable {
+  background: white;
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid #667eea;
+  color: #666;
+  text-align: center;
+}
+
+.standings-loading {
+  background: white;
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid #f39c12;
+  color: #666;
+  text-align: center;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @media (max-width: 768px) {
