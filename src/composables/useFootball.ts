@@ -16,6 +16,25 @@ interface LeagueGrouped {
 
 type StatusFilter = 'all' | 'live' | 'upcoming' | 'finished'
 
+/**
+ * Priorité des championnats par popularité
+ * Les championnats majeurs européens en priorité, les autres triés alphabétiquement après
+ */
+const LEAGUE_PRIORITY: Record<number, number> = {
+  // Compétitions majeures européennes
+  39: 1, // Premier League (Angleterre)
+  140: 2, // La Liga (Espagne)
+  135: 3, // Serie A (Italie)
+  61: 4, // Ligue 1 (France)
+  78: 5, // Bundesliga (Allemagne)
+  94: 6, // Primeira Liga (Portugal)
+  // Coupes européennes
+  848: 10, // Champions League
+  749: 11, // Europa League
+  // Championnats autres
+  // (les autres auront une priorité par défaut de 999)
+}
+
 export function useFootball() {
   const matches = ref<Match[]>([])
   const isLoading = ref(false)
@@ -197,11 +216,22 @@ export function useFootball() {
       }
     })
 
-    // Convertir en array et trier par pays puis par nom de ligue
+    // Convertir en array et trier par priorité puis par pays puis par nom de ligue
     return Array.from(leagueMap.values()).sort((a, b) => {
+      // Priorité par ID de ligue
+      const priorityA = LEAGUE_PRIORITY[a.id] ?? 999
+      const priorityB = LEAGUE_PRIORITY[b.id] ?? 999
+
+      if (priorityA !== priorityB) {
+        return priorityA - priorityB
+      }
+
+      // Si même priorité, trier par pays
       if (a.country !== b.country) {
         return a.country.localeCompare(b.country)
       }
+
+      // Finalement, trier par nom de ligue
       return a.name.localeCompare(b.name)
     })
   })
@@ -219,15 +249,29 @@ export function useFootball() {
 
   /**
    * Obtient la liste unique des ligues (filtrées par pays si sélectionné)
+   * Triées par priorité de popularité
    */
   const leagues = computed(() => {
-    const leagueSet = new Set<string>()
+    const leagueMap = new Map<number, { id: number; name: string }>()
     matches.value.forEach((match) => {
       if (selectedCountry.value === 'all' || match.league.country === selectedCountry.value) {
-        leagueSet.add(`${match.league.id}|${match.league.name}`)
+        if (!leagueMap.has(match.league.id)) {
+          leagueMap.set(match.league.id, { id: match.league.id, name: match.league.name })
+        }
       }
     })
-    return Array.from(leagueSet).sort()
+
+    // Convertir en array et trier par priorité
+    return Array.from(leagueMap.values())
+      .sort((a, b) => {
+        const priorityA = LEAGUE_PRIORITY[a.id] ?? 999
+        const priorityB = LEAGUE_PRIORITY[b.id] ?? 999
+        if (priorityA !== priorityB) {
+          return priorityA - priorityB
+        }
+        return a.name.localeCompare(b.name)
+      })
+      .map((league) => `${league.id}|${league.name}`)
   })
 
   /**
@@ -302,9 +346,20 @@ export function useFootball() {
     })
 
     return Array.from(leagueMap.values()).sort((a, b) => {
+      // Priorité par ID de ligue
+      const priorityA = LEAGUE_PRIORITY[a.id] ?? 999
+      const priorityB = LEAGUE_PRIORITY[b.id] ?? 999
+
+      if (priorityA !== priorityB) {
+        return priorityA - priorityB
+      }
+
+      // Si même priorité, trier par pays
       if (a.country !== b.country) {
         return a.country.localeCompare(b.country)
       }
+
+      // Finalement, trier par nom de ligue
       return a.name.localeCompare(b.name)
     })
   })
