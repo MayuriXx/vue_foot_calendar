@@ -1,0 +1,40 @@
+/* 
+ * Palette de couleurs centralisée
+ * Utilisez ces variables dans tous les fichiers Vue pour cohérence
+ */
+
+:root {
+  /* Teintes primaires */
+  --color-primary: #5b4fff;
+  --color-primary-light: #7d70ff;
+  --color-primary-lighter: #8b7fff;
+  --color-secondary: #8b7fff;
+  
+  /* Fonds */
+  --color-bg-dark: #0a0e27;
+  --color-bg-darker: #0f1729;
+  --color-bg-light: #1a2540;
+  
+  /* Texte */
+  --color-text: #e0e0e0;
+  --color-text-light: #ffffff;
+  --color-text-muted: #999;
+  
+  /* États */
+  --color-error: #ff6b6b;
+  --color-success: #2ed573;
+  --color-warning: #f39c12;
+  
+  /* Bordures */
+  --color-border: #1e2749;
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #5b4fff 0%, #8b7fff 100%);
+  --gradient-bg: linear-gradient(to bottom, #0a0e27, #0f1729);
+  
+  /* Overlays */
+  --overlay-xs: rgba(91, 79, 255, 0.08);
+  --overlay-sm: rgba(91, 79, 255, 0.1);
+  --overlay-md: rgba(91, 79, 255, 0.15);
+  --overlay-lg: rgba(91, 79, 255, 0.2);
+}

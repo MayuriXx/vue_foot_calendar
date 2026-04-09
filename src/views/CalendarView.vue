@@ -214,7 +214,7 @@ onMounted(() => {
 }
 
 .app-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient-primary);
   color: white;
   padding: 20px;
   display: flex;
@@ -293,12 +293,12 @@ onMounted(() => {
 
 .error-message {
   background-color: #fadbd8;
-  color: #e74c3c;
+  color: var(--color-error);
   padding: 20px;
   border-radius: 10px;
   text-align: center;
   font-size: 16px;
-  border: 1px solid #e74c3c;
+  border: 1px solid var(--color-error);
 }
 
 .matches-container h2 {
@@ -329,7 +329,7 @@ onMounted(() => {
 .filter-group label {
   font-size: 13px;
   font-weight: 600;
-  color: #667eea;
+  color: var(--color-primary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -347,18 +347,18 @@ onMounted(() => {
 }
 
 .filter-select:hover {
-  border-color: #667eea;
+  border-color: var(--color-primary);
 }
 
 .filter-select:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .reset-button {
   padding: 10px 20px;
-  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  background: linear-gradient(135deg, var(--color-error) 0%, #c0392b 100%);
   color: white;
   border: none;
   border-radius: 6px;
@@ -379,7 +379,7 @@ onMounted(() => {
 }
 
 .league-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient-primary);
   color: white;
   padding: 20px;
   border-radius: 10px;
@@ -442,7 +442,7 @@ onMounted(() => {
 }
 
 .section-title {
-  color: #667eea;
+  color: var(--color-primary);
   font-size: 18px;
   margin-bottom: 18px;
   font-weight: 600;
@@ -484,7 +484,7 @@ onMounted(() => {
   padding: 18px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.3s;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid var(--color-primary);
   cursor: pointer;
 }
 
@@ -494,7 +494,7 @@ onMounted(() => {
 }
 
 .match-card.live {
-  border-left-color: #e74c3c;
+  border-left-color: var(--color-error);
   background: rgba(231, 76, 60, 0.05);
 }
 
@@ -576,7 +576,7 @@ onMounted(() => {
 .score {
   font-size: 24px;
   font-weight: bold;
-  color: #667eea;
+  color: var(--color-primary);
   min-width: 60px;
   text-align: center;
 }
@@ -590,7 +590,7 @@ onMounted(() => {
 }
 
 .status-badge.live {
-  background-color: #e74c3c;
+  background-color: var(--color-error);
   color: white;
   animation: blink 1s infinite;
 }

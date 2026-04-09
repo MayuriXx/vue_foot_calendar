@@ -51,7 +51,7 @@ defineProps<Props>()
 
 .score-value {
   font-weight: 600;
-  color: #667eea;
+  color: var(--color-primary);
   font-size: 18px;
 }
 </style>

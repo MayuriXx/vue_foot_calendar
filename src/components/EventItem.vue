@@ -61,7 +61,7 @@ const formatMins = (mins: number | null) => {
   padding: 15px;
   background-color: #f9f9f9;
   border-radius: 8px;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid var(--color-primary);
   transition: background-color 0.2s;
 }
 
@@ -75,14 +75,14 @@ const formatMins = (mins: number | null) => {
 }
 
 .event-item.red-card {
-  border-left-color: #e74c3c;
+  border-left-color: var(--color-error);
   background-color: #fadbd8;
 }
 
 .event-time {
   min-width: 50px;
   font-weight: 600;
-  color: #667eea;
+  color: var(--color-primary);
   font-size: 16px;
 }
 

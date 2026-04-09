@@ -77,7 +77,7 @@ const getStatusLabel = (status: string) => {
   padding: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.3s;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid var(--color-primary);
   cursor: pointer;
 }
 
@@ -87,8 +87,8 @@ const getStatusLabel = (status: string) => {
 }
 
 .match-card.live {
-  border-left-color: #e74c3c;
-  background: rgba(231, 76, 60, 0.05);
+  border-left-color: var(--color-error);
+  background: rgba(255, 107, 107, 0.05);
 }
 
 .match-card.finished {
@@ -169,7 +169,7 @@ const getStatusLabel = (status: string) => {
 .score {
   font-size: 24px;
   font-weight: bold;
-  color: #667eea;
+  color: var(--color-primary);
   min-width: 60px;
   text-align: center;
 }
@@ -183,7 +183,7 @@ const getStatusLabel = (status: string) => {
 }
 
 .status-badge.live {
-  background-color: #e74c3c;
+  background-color: var(--color-error);
   color: white;
   animation: blink 1s infinite;
 }

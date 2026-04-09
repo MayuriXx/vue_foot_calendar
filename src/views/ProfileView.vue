@@ -213,7 +213,7 @@ onMounted(() => {
 }
 
 .profile-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient-primary);
   color: white;
   padding: 30px 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -284,7 +284,7 @@ section h2 {
   margin-bottom: 25px;
   color: #333;
   font-size: 22px;
-  border-bottom: 2px solid #667eea;
+  border-bottom: 2px solid var(--color-primary);
   padding-bottom: 10px;
 }
 
@@ -306,7 +306,7 @@ section h2 {
 
 .label {
   font-weight: 600;
-  color: #667eea;
+  color: var(--color-primary);
   min-width: 100px;
 }
 
@@ -320,7 +320,7 @@ section h2 {
 }
 
 .favorite-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient-primary);
   color: white;
   padding: 25px;
   border-radius: 10px;
@@ -402,14 +402,14 @@ section h2 {
 }
 
 .league-btn:hover {
-  border-color: #667eea;
+  border-color: var(--color-primary);
   background: #f9f9f9;
 }
 
 .league-btn.active {
-  background: #667eea;
+  background: var(--color-primary);
   color: white;
-  border-color: #667eea;
+  border-color: var(--color-primary);
 }
 
 /* Search Box */
@@ -428,7 +428,7 @@ section h2 {
 
 .search-input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: var(--color-primary);
 }
 
 /* Teams Grid */
@@ -455,7 +455,7 @@ section h2 {
 }
 
 .team-card:hover {
-  border-color: #667eea;
+  border-color: var(--color-primary);
   background: #f0f0f8;
   transform: translateY(-2px);
 }
@@ -512,7 +512,7 @@ section h2 {
 
 .error-message {
   background: #fadbd8;
-  color: #e74c3c;
+  color: var(--color-error);
 }
 
 /* Responsive */

@@ -83,7 +83,7 @@ const handleKeyPress = (event: KeyboardEvent) => {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient-primary);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -126,8 +126,8 @@ const handleKeyPress = (event: KeyboardEvent) => {
 
 .form-group input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 5px rgba(91, 79, 255, 0.3);
 }
 
 .form-group input:disabled {
@@ -148,7 +148,7 @@ const handleKeyPress = (event: KeyboardEvent) => {
 .login-button {
   width: 100%;
   padding: 12px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient-primary);
   color: white;
   border: none;
   border-radius: 5px;
@@ -160,7 +160,7 @@ const handleKeyPress = (event: KeyboardEvent) => {
 
 .login-button:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 5px 15px rgba(91, 79, 255, 0.4);
 }
 
 .login-button:disabled {

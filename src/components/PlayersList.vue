@@ -47,7 +47,7 @@ withDefaults(defineProps<Props>(), {
 }
 
 .players-group h4 {
-  color: #667eea;
+  color: var(--color-primary);
   font-size: 13px;
   font-weight: 600;
   margin: 0 0 10px 0;
@@ -76,7 +76,7 @@ withDefaults(defineProps<Props>(), {
 .player-number {
   min-width: 25px;
   font-weight: 600;
-  color: #667eea;
+  color: var(--color-primary);
   text-align: center;
   background: #f0f0f0;
   padding: 3px 6px;

@@ -127,7 +127,7 @@ const goBack = () => {
 }
 
 .detail-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient-primary);
   color: white;
   padding: 20px;
   display: flex;
@@ -182,8 +182,8 @@ const goBack = () => {
 
 .error-message {
   background-color: #fadbd8;
-  color: #e74c3c;
-  border: 1px solid #e74c3c;
+  color: var(--color-error);
+  border: 1px solid var(--color-error);
 }
 
 .detail-content {
@@ -197,7 +197,7 @@ const goBack = () => {
   border-radius: 10px;
   padding: 25px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  border-left: 4px solid #667eea;
+  border-left: 4px solid var(--color-primary);
   color: #666;
   text-align: center;
 }

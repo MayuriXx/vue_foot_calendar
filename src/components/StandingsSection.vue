@@ -97,7 +97,7 @@ const getTeamHighlight = (teamId: number, homeId: number, awayId: number) => {
   display: grid;
   grid-template-columns: 40px 1fr 35px 35px 35px 35px 50px 60px;
   gap: 8px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient-primary);
   color: white;
   padding: 12px;
   font-weight: 600;
@@ -149,13 +149,13 @@ const getTeamHighlight = (teamId: number, homeId: number, awayId: number) => {
 
 .standing-row.away-highlight {
   background-color: rgba(102, 126, 234, 0.1);
-  border-left: 4px solid #667eea;
+  border-left: 4px solid var(--color-primary);
   padding-left: 8px;
 }
 
 .rank {
   font-weight: 600;
-  color: #667eea;
+  color: var(--color-primary);
   text-align: center;
 }
 
@@ -195,13 +195,13 @@ const getTeamHighlight = (teamId: number, homeId: number, awayId: number) => {
 }
 
 .diff.negative {
-  color: #e74c3c;
+  color: var(--color-error);
 }
 
 .points {
   text-align: center;
   font-weight: 700;
-  color: #667eea;
+  color: var(--color-primary);
   font-size: 14px;
 }
 

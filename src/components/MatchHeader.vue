@@ -99,7 +99,7 @@ defineProps<Props>()
 .score {
   font-size: 48px;
   font-weight: bold;
-  color: #667eea;
+  color: var(--color-primary);
   margin-bottom: 10px;
 }
 

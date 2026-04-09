@@ -46,7 +46,7 @@ defineProps<Props>()
 }
 
 .team-stats h3 {
-  color: #667eea;
+  color: var(--color-primary);
   font-size: 16px;
   margin-bottom: 15px;
   text-align: center;
