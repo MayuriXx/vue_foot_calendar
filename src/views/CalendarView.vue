@@ -3,6 +3,7 @@ import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
 import { onMounted } from 'vue'
 import { useFootball } from '@/composables/useFootball'
+import MatchCard from '@/components/MatchCard.vue'
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -13,28 +14,13 @@ const handleLogout = async () => {
   await router.push('/login')
 }
 
+const goToMatchDetail = (fixtureId: number) => {
+  router.push(`/match/${fixtureId}`)
+}
+
 onMounted(() => {
   loadTodayMatches()
 })
-
-const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
-}
-
-const getStatusLabel = (status: string) => {
-  const statusMap: Record<string, string> = {
-    'NS': 'À venir',
-    'PST': 'Reporté',
-    '1H': 'Match en cours (1ère mi-temps)',
-    '2H': 'Match en cours (2ème mi-temps)',
-    'ET': 'Match en cours (prolongations)',
-    'P': 'Match en cours (TAB)',
-    'FT': 'Terminé',
-    'AET': 'Terminé (après prolongations)',
-    'PEN': 'Terminé (après TAB)',
-  }
-  return statusMap[status] || status
-}
 </script>
 
 <template>
@@ -69,37 +55,13 @@ const getStatusLabel = (status: string) => {
         <section v-if="liveMatches.length > 0" class="matches-section">
           <h3 class="section-title">🔴 En direct</h3>
           <div class="matches-grid">
-            <div v-for="match in liveMatches" :key="match.fixture.id" class="match-card live">
-              <div class="match-time">
-                {{ formatDate(match.fixture.date) }}
-              </div>
-
-              <div class="league-info">
-                <img :src="match.league.logo" :alt="match.league.name" class="league-logo" />
-                <span class="league-name">{{ match.league.name }}</span>
-              </div>
-
-              <div class="teams-match">
-                <div class="team home">
-                  <img :src="match.teams.home.logo" :alt="match.teams.home.name" class="team-logo" />
-                  <span class="team-name">{{ match.teams.home.name }}</span>
-                </div>
-
-                <div class="score-display">
-                  <span class="score">{{ match.goals.home ?? '-' }} - {{ match.goals.away ?? '-' }}</span>
-                  <span class="status-badge live">EN DIRECT</span>
-                </div>
-
-                <div class="team away">
-                  <span class="team-name">{{ match.teams.away.name }}</span>
-                  <img :src="match.teams.away.logo" :alt="match.teams.away.name" class="team-logo" />
-                </div>
-              </div>
-
-              <div class="match-status">
-                {{ getStatusLabel(match.fixture.status.short) }}
-              </div>
-            </div>
+            <MatchCard
+              v-for="match in liveMatches"
+              :key="match.fixture.id"
+              :match="match"
+              is-live-match
+              @click="goToMatchDetail(match.fixture.id)"
+            />
           </div>
         </section>
 
@@ -107,36 +69,12 @@ const getStatusLabel = (status: string) => {
         <section v-if="upcomingMatches.length > 0" class="matches-section">
           <h3 class="section-title">⏰ À venir</h3>
           <div class="matches-grid">
-            <div v-for="match in upcomingMatches" :key="match.fixture.id" class="match-card">
-              <div class="match-time">
-                {{ formatDate(match.fixture.date) }}
-              </div>
-
-              <div class="league-info">
-                <img :src="match.league.logo" :alt="match.league.name" class="league-logo" />
-                <span class="league-name">{{ match.league.name }}</span>
-              </div>
-
-              <div class="teams-match">
-                <div class="team home">
-                  <img :src="match.teams.home.logo" :alt="match.teams.home.name" class="team-logo" />
-                  <span class="team-name">{{ match.teams.home.name }}</span>
-                </div>
-
-                <div class="score-display">
-                  <span class="score">vs</span>
-                </div>
-
-                <div class="team away">
-                  <span class="team-name">{{ match.teams.away.name }}</span>
-                  <img :src="match.teams.away.logo" :alt="match.teams.away.name" class="team-logo" />
-                </div>
-              </div>
-
-              <div class="match-status">
-                {{ getStatusLabel(match.fixture.status.short) }}
-              </div>
-            </div>
+            <MatchCard
+              v-for="match in upcomingMatches"
+              :key="match.fixture.id"
+              :match="match"
+              @click="goToMatchDetail(match.fixture.id)"
+            />
           </div>
         </section>
 
@@ -144,36 +82,13 @@ const getStatusLabel = (status: string) => {
         <section v-if="finishedMatches.length > 0" class="matches-section">
           <h3 class="section-title">✅ Terminés</h3>
           <div class="matches-grid">
-            <div v-for="match in finishedMatches" :key="match.fixture.id" class="match-card finished">
-              <div class="match-time">
-                {{ formatDate(match.fixture.date) }}
-              </div>
-
-              <div class="league-info">
-                <img :src="match.league.logo" :alt="match.league.name" class="league-logo" />
-                <span class="league-name">{{ match.league.name }}</span>
-              </div>
-
-              <div class="teams-match">
-                <div class="team home">
-                  <img :src="match.teams.home.logo" :alt="match.teams.home.name" class="team-logo" />
-                  <span class="team-name">{{ match.teams.home.name }}</span>
-                </div>
-
-                <div class="score-display">
-                  <span class="score">{{ match.goals.home ?? '-' }} - {{ match.goals.away ?? '-' }}</span>
-                </div>
-
-                <div class="team away">
-                  <span class="team-name">{{ match.teams.away.name }}</span>
-                  <img :src="match.teams.away.logo" :alt="match.teams.away.name" class="team-logo" />
-                </div>
-              </div>
-
-              <div class="match-status">
-                {{ getStatusLabel(match.fixture.status.short) }}
-              </div>
-            </div>
+            <MatchCard
+              v-for="match in finishedMatches"
+              :key="match.fixture.id"
+              :match="match"
+              is-past-match
+              @click="goToMatchDetail(match.fixture.id)"
+            />
           </div>
         </section>
       </div>
@@ -274,6 +189,7 @@ const getStatusLabel = (status: string) => {
   font-size: 20px;
   margin-bottom: 20px;
   font-weight: 600;
+  cursor: pointer;
 }
 
 .matches-grid {

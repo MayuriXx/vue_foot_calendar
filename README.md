@@ -29,14 +29,24 @@ src/
 │   └── football.service.ts      # Client API-Football
 │
 ├── composables/                 # Hooks réutilisables
-│   └── useFootball.ts           # État et logique des matchs
+│   ├── useFootball.ts           # État et logique des matchs
+│   └── useMatchDetail.ts        # État et logique des détails d'un match
 │
 ├── views/                       # Pages principales (avec router)
 │   ├── LoginView.vue            # Page de connexion
-│   └── CalendarView.vue         # Calendrier avec matchs API-Football
+│   ├── CalendarView.vue         # Calendrier avec matchs (utilise MatchCard)
+│   └── MatchDetailView.vue      # Détails d'un match (composé de sous-composants)
 │
 ├── components/                  # Composants réutilisables
-│   └── (à remplir)              # Ex: CalendarCard, EventCard, etc.
+│   ├── MatchCard.vue            # Carte affichant un match
+│   ├── MatchHeader.vue          # En-tête du match (teams, score, date, venue)
+│   ├── ScoresSection.vue        # Section scores (mi-temps, temps réglementaire, etc.)
+│   ├── StatisticsSection.vue    # Section statistiques (possession, tirs, etc.)
+│   ├── EventsTimeline.vue       # Timeline des événements du match
+│   ├── EventItem.vue            # Événement individuel (goal, card, subst)
+│   ├── LineupsSection.vue       # Section formations des deux équipes
+│   ├── TeamLineup.vue           # Formation d'une équipe
+│   └── PlayersList.vue          # Liste de joueurs (titulaires ou remplaçants)
 │
 ├── router/                      # Configuration Vue Router
 │   └── index.ts                 # Routes + guards
@@ -174,6 +184,60 @@ const {
 } = useFootball()
 ```
 
+### 5️⃣ **Architecture Composante Modulaire**
+
+La vue `MatchDetailView` utilise une architecture composante pour une meilleure réutilisabilité :
+
+```typescript
+// MatchDetailView.vue utilise ces composants :
+<MatchHeader :match="match" />              <!-- En-tête du match -->
+<ScoresSection :match="match" />            <!-- Scores (mi-temps, etc.) -->
+<StatisticsSection :statistics="statistics" /> <!-- Statistiques -->
+<EventsTimeline :events="events" />         <!-- Timeline des événements -->
+<LineupsSection :lineups="lineups" />       <!-- Formations -->
+```
+
+Chaque composant :
+
+- ✅ Est indépendant et testable
+- ✅ Reçoit des props typées
+- ✅ Gère son propre rendu
+- ✅ Peut être réutilisé ailleurs
+
+**Composants Disponibles** :
+
+| Composant | Props | Usage |
+| --- | --- | --- |
+| `MatchCard` | `match`, `isLiveMatch?`, `isPastMatch?` | Affiche un match en carte (calendrier) |
+| `MatchHeader` | `match` | En-tête du match (teams, score) |
+| `ScoresSection` | `match` | Scores détaillés (mi-temps, FT, etc.) |
+| `StatisticsSection` | `statistics` | Comparaison stats des deux équipes |
+| `EventsTimeline` | `events` | Timeline interactive des événements |
+| `EventItem` | `event` | Événement individuel (goal, card, sub) |
+| `LineupsSection` | `lineups` | Container pour les formations |
+| `TeamLineup` | `lineup` | Formation d'une équipe avec joueurs |
+| `PlayersList` | `title`, `players`, `isSubstitute?` | Liste réutilisable de joueurs |
+
+### 6️⃣ **Flux d'Utilisation des Composants**
+
+```text
+CalendarView.vue
+    ↓
+    └─→ MatchCard.vue × N
+            ↓ (click) → /match/:fixtureId
+            
+MatchDetailView.vue
+    ↓
+    ├─→ MatchHeader.vue
+    ├─→ ScoresSection.vue
+    ├─→ StatisticsSection.vue
+    ├─→ EventsTimeline.vue
+    │   └─→ EventItem.vue × N
+    └─→ LineupsSection.vue
+        └─→ TeamLineup.vue × 2
+            └─→ PlayersList.vue × 2
+```
+
 ---
 
 ## 🧪 Essayer la Démo
@@ -248,13 +312,19 @@ interface AuthResponse {
 
 ## 📚 Prochaines Étapes
 
+- [x] Créer une page de connexion avec validation
+- [x] Implémenter Pinia pour la gestion d'état
+- [x] Configurer Vue Router avec guards
+- [x] Intégrer l'API-Football pour les données live
+- [x] Créer une architecture modulaire avec composants
 - [ ] Connecter une vrai API d'authentification
-- [ ] Ajouter un calendrier fonctionnel
+- [ ] Ajouter des filtres de calendrier avancés
 - [ ] Gérer les erreurs API plus robustement
 - [ ] Ajouter des notifications (toasts)
 - [ ] Implémenter un refresh token
-- [ ] Ajouter des tests unitaires
-- [ ] Design responsive mobile
+- [ ] Ajouter des tests unitaires (Vitest)
+- [ ] Design responsive mobile (optimiser pour petits écrans)
+- [ ] Ajouter des animations de transition entre pages
 
 ---
 

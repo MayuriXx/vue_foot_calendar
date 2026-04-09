@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import LoginView from '@/views/LoginView.vue'
 import CalendarView from '@/views/CalendarView.vue'
+import MatchDetailView from '@/views/MatchDetailView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -16,6 +17,12 @@ const router = createRouter({
       path: '/calendar',
       name: 'Calendar',
       component: CalendarView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/match/:fixtureId',
+      name: 'MatchDetail',
+      component: MatchDetailView,
       meta: { requiresAuth: true },
     },
     {

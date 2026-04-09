@@ -131,3 +131,83 @@ export interface MatchesQueryParams {
   from?: string
   to?: string
 }
+
+// Match Statistics
+export interface MatchStatistics {
+  team: {
+    id: number
+    name: string
+    logo: string
+  }
+  statistics: Array<{
+    type: string
+    value: string | number
+  }>
+}
+
+// Match Event
+export interface MatchEvent {
+  type: 'Goal' | 'Card' | 'subst' | 'Var'
+  detail: string
+  comments: string | null
+  time: {
+    elapsed: number | null
+    extra: number | null
+  }
+  team: {
+    id: number
+    name: string
+    logo: string
+  }
+  player: {
+    id: number
+    name: string
+  }
+  assist?: {
+    id: number
+    name: string
+  }
+}
+
+// Match Lineups (Formations)
+export interface MatchLineup {
+  team: {
+    id: number
+    name: string
+    logo: string
+    formation: string
+  }
+  coach: {
+    id: number
+    name: string
+  }
+  startXI: Array<{
+    player: {
+      id: number
+      name: string
+      number: number
+      pos: string
+    }
+  }>
+  substitutes: Array<{
+    player: {
+      id: number
+      name: string
+      number: number
+      pos: string
+    }
+  }>
+}
+
+// Complete Match Details
+export interface MatchDetails {
+  fixture: Match['fixture']
+  league: Match['league']
+  teams: Match['teams']
+  goals: Match['goals']
+  score: Match['score']
+  statistics: MatchStatistics[]
+  events: MatchEvent[]
+  lineups: MatchLineup[]
+}
+

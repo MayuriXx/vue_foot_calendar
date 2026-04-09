@@ -1,4 +1,4 @@
-import type { ApiFootballResponse, Match, League, Team, MatchesQueryParams } from '@/types/football'
+import type { ApiFootballResponse, Match, League, Team, MatchesQueryParams, MatchStatistics, MatchEvent, MatchLineup } from '@/types/football'
 
 class FootballService {
   private apiKey: string
@@ -14,6 +14,26 @@ class FootballService {
     this.headers = {
       'x-rapidapi-key': this.apiKey,
       'x-rapidapi-host': import.meta.env.VITE_API_FOOTBALL_HOST || 'v3.football.api-sports.io',
+    }
+  }
+
+  /**
+   * Récupère un match spécifique par son ID
+   */
+  async getMatchById(fixtureId: number): Promise<Match | null> {
+    try {
+      const url = `${this.baseURL}/fixtures?id=${fixtureId}`
+      const response = await fetch(url, { headers: this.headers })
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`)
+      }
+
+      const data: ApiFootballResponse<Match> = await response.json()
+      return data.response[0] || null
+    } catch (error) {
+      console.error('Error fetching match:', error)
+      return null
     }
   }
 
@@ -134,6 +154,66 @@ class FootballService {
     } catch (error) {
       console.error('Error fetching league:', error)
       return null
+    }
+  }
+
+  /**
+   * Récupère les statistiques d'un match
+   */
+  async getMatchStatistics(fixtureId: number): Promise<MatchStatistics[]> {
+    try {
+      const url = `${this.baseURL}/fixtures/statistics?fixture=${fixtureId}`
+      const response = await fetch(url, { headers: this.headers })
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`)
+      }
+
+      const data: ApiFootballResponse<MatchStatistics> = await response.json()
+      return data.response
+    } catch (error) {
+      console.error('Error fetching match statistics:', error)
+      return []
+    }
+  }
+
+  /**
+   * Récupère les événements d'un match
+   */
+  async getMatchEvents(fixtureId: number): Promise<MatchEvent[]> {
+    try {
+      const url = `${this.baseURL}/fixtures/events?fixture=${fixtureId}`
+      const response = await fetch(url, { headers: this.headers })
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`)
+      }
+
+      const data: ApiFootballResponse<MatchEvent> = await response.json()
+      return data.response
+    } catch (error) {
+      console.error('Error fetching match events:', error)
+      return []
+    }
+  }
+
+  /**
+   * Récupère les formations d'un match
+   */
+  async getMatchLineups(fixtureId: number): Promise<MatchLineup[]> {
+    try {
+      const url = `${this.baseURL}/fixtures/lineups?fixture=${fixtureId}`
+      const response = await fetch(url, { headers: this.headers })
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`)
+      }
+
+      const data: ApiFootballResponse<MatchLineup> = await response.json()
+      return data.response
+    } catch (error) {
+      console.error('Error fetching match lineups:', error)
+      return []
     }
   }
 }
