@@ -25,12 +25,15 @@ src/
 │   └── auth.ts                  # Store authentification (user, token, isLoading)
 │
 ├── services/                    # Services métier
-│   ├── api.ts                   # Client Axios avec interceptors
-│   └── auth.service.ts          # Logique d'authentification
+│   ├── auth.service.ts          # Logique d'authentification
+│   └── football.service.ts      # Client API-Football
+│
+├── composables/                 # Hooks réutilisables
+│   └── useFootball.ts           # État et logique des matchs
 │
 ├── views/                       # Pages principales (avec router)
 │   ├── LoginView.vue            # Page de connexion
-│   └── CalendarView.vue         # Page calendrier (placeholder)
+│   └── CalendarView.vue         # Calendrier avec matchs API-Football
 │
 ├── components/                  # Composants réutilisables
 │   └── (à remplir)              # Ex: CalendarCard, EventCard, etc.
@@ -39,7 +42,8 @@ src/
 │   └── index.ts                 # Routes + guards
 │
 ├── types/                       # Types TypeScript
-│   └── user.ts                  # Types User, LoginCredentials, AuthResponse
+│   ├── user.ts                  # Types authentification
+│   └── football.ts              # Types API-Football
 │
 ├── App.vue                      # App racine avec router-view
 └── main.ts                      # Point d'entrée (Pinia + Router)
@@ -149,14 +153,25 @@ Le `beforeEach` hook protège les routes :
 - Si vous accédez `/calendar` sans auth → Redirect `/login`
 - Si vous accédez `/login` avec auth → Redirect `/calendar`
 
-### 4️⃣ **Client API avec Axios** (`services/api.ts`)
+### 4️⃣ **Composable Football** (`composables/useFootball.ts`)
 
-Gère les requêtes HTTP avec interceptors :
+Récupère et organise les données de l'API-Football :
 
 ```typescript
-// Ajoute automatiquement le token à chaque requête
-// Gère les erreurs 401 (token expiré)
-// À utiliser pour les futurs appels API
+import { useFootball } from '@/composables/useFootball'
+
+const { 
+  matches,           // Tous les matchs
+  isLoading,         // État du chargement
+  error,             // Messages d'erreur
+  liveMatches,       // Matchs en direct
+  upcomingMatches,   // Matchs à venir
+  finishedMatches,   // Matchs terminés
+  loadTodayMatches,  // Charge les matchs du jour
+  loadMatchesByDateRange,
+  loadTeamMatches,
+  loadLeagueMatches,
+} = useFootball()
 ```
 
 ---
@@ -174,27 +189,22 @@ Après `npm run dev`, l'app sera disponible sur `http://localhost:5173`
 
 1. Ouvrir l'app → Vous êtes redirigé vers `/login`
 2. Entrer `test` / `1234` → Connexion simule 1 seconde
-3. Page calendrier s'affiche → Session sauvegardée
+3. Page calendrier s'affiche → Matchs de l'API-Football chargés
 4. Rafraîchir la page → Vous restez connecté (localStorage)
 5. Cliquer "Déconnexion" → Retour au login
 
 ---
 
-## 🔧 Configurer une Vraie API
+## 🌐 Données Provenant de l'API-Football
 
-Le système est prêt pour une API réelle. Modifier `services/auth.service.ts` :
+Toutes les données de matchs proviennent de [api-football.com](https://www.api-football.com/) :
 
-```typescript
-// À la place de la simulation
-async login(credentials: LoginCredentials): Promise<AuthResponse> {
-  try {
-    const api = apiService.getApi()
-    const response = await api.post('/auth/login', credentials)
-    // response.data = { user, token }
-    ...
-  }
-}
-```
+- ✅ Matchs en direct et à venir
+- ✅ Résultats et scores
+- ✅ Équipes et ligues
+- ✅ Logos et informations officielles
+
+Les données sont récupérées automatiquement au chargement de la page calendrier via `useFootball()`.
 
 ---
 
