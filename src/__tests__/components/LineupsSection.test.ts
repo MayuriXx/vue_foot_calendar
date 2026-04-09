@@ -9,6 +9,11 @@ const mockLineup: MatchLineup = {
     id: 1,
     name: 'Team A',
     logo: 'https://example.com/logo.png',
+    formation: '4-3-3',
+  },
+  coach: {
+    id: 1,
+    name: 'Coach Name',
   },
   formation: '4-3-3',
   startXI: [
@@ -104,7 +109,7 @@ describe('LineupsSection.vue', () => {
   it('renders both team lineups in grid', () => {
     const mockLineup2 = {
       ...mockLineup,
-      team: { id: 2, name: 'Team B', logo: 'https://example.com/logo2.png' },
+      team: { id: 2, name: 'Team B', logo: 'https://example.com/logo2.png', formation: '4-3-3' },
     }
 
     const wrapper = mount(LineupsSection, {

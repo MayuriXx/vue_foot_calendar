@@ -73,7 +73,6 @@ const mockEvents: MatchEvent[] = [
     detail: 'Normal Goal',
     comments: null,
     player: { id: 1, name: 'Player 1' },
-    assist: null,
     team: { id: 1, name: 'Team A', logo: 'https://example.com/a.png' },
   },
 ] as MatchEvent[]
@@ -81,7 +80,7 @@ const mockEvents: MatchEvent[] = [
 const mockLineups: MatchLineup[] = [
   {
     team: { id: 1, name: 'Team A', logo: 'https://example.com/a.png', formation: '4-3-3' },
-    formation: '4-3-3',
+    coach: { id: 1, name: 'Coach Name' },
     startXI: [],
     substitutes: [],
   },
@@ -306,7 +305,7 @@ describe('useMatchDetail', () => {
     vi.mocked(footballService.getStandings).mockResolvedValue([[]])
     vi.mocked(cacheService.get).mockReturnValue(null)
 
-    const { standings, standingsError, loadMatchDetails, loadStandings } = useMatchDetail(1)
+    const { standingsError, loadMatchDetails, loadStandings } = useMatchDetail(1)
 
     await loadMatchDetails()
     await loadStandings()

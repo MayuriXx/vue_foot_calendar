@@ -75,7 +75,7 @@ describe('EventItem.vue', () => {
       ...mockEvent,
       type: 'Card',
       detail: 'Yellow Card',
-    }
+    } as MatchEvent
 
     const wrapper = mount(EventItem, {
       props: {
@@ -91,7 +91,7 @@ describe('EventItem.vue', () => {
       ...mockEvent,
       type: 'Card',
       detail: 'Yellow Card',
-    }
+    } as MatchEvent
 
     const wrapper = mount(EventItem, {
       props: {
@@ -107,7 +107,7 @@ describe('EventItem.vue', () => {
       ...mockEvent,
       type: 'Card',
       detail: 'Red Card',
-    }
+    } as MatchEvent
 
     const wrapper = mount(EventItem, {
       props: {
@@ -135,7 +135,7 @@ describe('EventItem.vue', () => {
         elapsed: null,
         extra: null,
       },
-    }
+    } as MatchEvent
 
     const wrapper = mount(EventItem, {
       props: {

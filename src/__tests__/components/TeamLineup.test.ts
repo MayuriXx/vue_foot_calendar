@@ -11,6 +11,10 @@ const mockLineup: MatchLineup = {
     logo: 'https://example.com/chelsea.png',
     formation: '4-3-3',
   },
+  coach: {
+    id: 1,
+    name: 'Coach Name',
+  },
   formation: '4-3-3',
   startXI: [
     { player: { id: 1, name: 'Keeper', number: 1, pos: 'G' } },

@@ -128,7 +128,6 @@ describe('EventsTimeline.vue', () => {
         detail: `Goal ${i + 1}`,
         comments: null,
         player: { id: i, name: `Player ${i}` },
-        assist: null,
         team: { id: 1, name: 'Team A', logo: 'https://example.com/logo.png' },
       })) as MatchEvent[]
 
