@@ -1,45 +1,27 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+
+const authStore = useAuthStore()
+const router = useRouter()
 
 const username = ref('')
 const password = ref('')
-const errorMessage = ref('')
-const isLoading = ref(false)
 
 const handleLogin = async () => {
-  errorMessage.value = ''
-  
-  if (!username.value || !password.value) {
-    errorMessage.value = 'Veuillez remplir tous les champs'
-    return
-  }
+  const result = await authStore.login({
+    username: username.value,
+    password: password.value,
+  })
 
-  isLoading.value = true
-  
-  try {
-    // Simule une vérification de connexion
-    // À remplacer par un vrai appel API
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
-    if (username.value && password.value.length >= 3) {
-      // Stocke les informations de connexion
-      localStorage.setItem('user', username.value)
-      localStorage.setItem('isLoggedIn', 'true')
-      
-      // Recharge la page ou redirige
-      window.location.reload()
-    } else {
-      errorMessage.value = 'Identifiants invalides'
-    }
-  } catch (error) {
-    errorMessage.value = 'Erreur lors de la connexion'
-  } finally {
-    isLoading.value = false
+  if (result.success) {
+    await router.push('/calendar')
   }
 }
 
 const handleKeyPress = (event: KeyboardEvent) => {
-  if (event.key === 'Enter') {
+  if (event.key === 'Enter' && !authStore.isLoading) {
     handleLogin()
   }
 }
@@ -49,7 +31,7 @@ const handleKeyPress = (event: KeyboardEvent) => {
   <div class="login-container">
     <div class="login-box">
       <h1>Connexion</h1>
-      
+
       <form @submit.prevent="handleLogin">
         <div class="form-group">
           <label for="username">Nom d'utilisateur</label>
@@ -58,7 +40,7 @@ const handleKeyPress = (event: KeyboardEvent) => {
             v-model="username"
             type="text"
             placeholder="Entrez votre nom d'utilisateur"
-            :disabled="isLoading"
+            :disabled="authStore.isLoading"
             @keypress="handleKeyPress"
           />
         </div>
@@ -70,21 +52,21 @@ const handleKeyPress = (event: KeyboardEvent) => {
             v-model="password"
             type="password"
             placeholder="Entrez votre mot de passe"
-            :disabled="isLoading"
+            :disabled="authStore.isLoading"
             @keypress="handleKeyPress"
           />
         </div>
 
-        <div v-if="errorMessage" class="error-message">
-          {{ errorMessage }}
+        <div v-if="authStore.error" class="error-message">
+          {{ authStore.error }}
         </div>
 
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           class="login-button"
-          :disabled="isLoading"
+          :disabled="authStore.isLoading"
         >
-          {{ isLoading ? 'Connexion en cours...' : 'Se connecter' }}
+          {{ authStore.isLoading ? 'Connexion en cours...' : 'Se connecter' }}
         </button>
       </form>
 
